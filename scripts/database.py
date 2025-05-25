@@ -49,5 +49,17 @@ def database_write1(prompt):
 
     DBConnection.commit()
 
+#- System2 Queries ---------------------------------------------------------------------------------
+
+def database_write2(moisture, temperature, humidity, callibration):
+    now = time.strftime('%Y-%m-%d %H:%M:%S')
+    Cursor.execute(
+        "INSERT INTO system2 (timestamp, soilMoisture, temperature, humidity, moistureValue)\
+                VALUES (%s, %s, %s, %s, %s)",
+        (now, moisture, temperature, humidity, callibration)
+    )
+    DBConnection.commit()
+
+
 #---------------------------------------------------------------------------------------------------
 
