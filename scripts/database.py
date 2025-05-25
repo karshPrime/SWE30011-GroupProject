@@ -49,6 +49,7 @@ def database_write1(prompt):
 
     DBConnection.commit()
 
+
 #- System2 Queries ---------------------------------------------------------------------------------
 
 def database_write2(moisture, temperature, humidity, callibration):
@@ -60,6 +61,24 @@ def database_write2(moisture, temperature, humidity, callibration):
     )
     DBConnection.commit()
 
+
+#- System3 Queries ---------------------------------------------------------------------------------
+
+def database_write3(potentiometer, button, motionSensor):
+    now = time.strftime('%Y-%m-%d %H:%M:%S')
+    Cursor.execute(
+        "INSERT INTO system3 (timestamp, potentiometer, button, motionSensor)\
+                VALUES (%s, %s, %s, %s)",
+        (now, potentiometer, button, motionSensor)
+    )
+    DBConnection.commit()
+
+
+#- Shutdown ----------------------------------------------------------------------------------------
+
+def close_connection():
+    Cursor.close()
+    DBConnection.close()
 
 #---------------------------------------------------------------------------------------------------
 

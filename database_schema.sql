@@ -15,3 +15,10 @@ CREATE TABLE system2 (
     moistureValue INT
 );
 
+CREATE TABLE system3 (
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP PRIMARY KEY,
+    potentiometer FLOAT,
+    button BOOLEAN,
+    motionSensor BOOLEAN
+);
+

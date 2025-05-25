@@ -41,7 +41,7 @@ void loop() {
     ledIsOn = false;
   }
 
-  // === Upload status: MS:x;BT:y; every 500ms ===
+  // === Upload status: MS:x;BT:y; ===
   int msState = digitalRead(PIR_PIN);
   int btState = (digitalRead(BUTTON_PIN) == LOW) ? 1 : 0;
   Serial.print("MS:");
@@ -64,58 +64,44 @@ void serialEvent() {
   }
 }
 
-// === Parse command from Edge in format: BT:x;MS:y; ===
+// === Parse new format: BUZ:0/1;LED:0/1;LCD:xx.xx; ===
 void parseAndExecuteCommand(String command) {
-  int btValue = -1;
-  int msValue = -1;
+  int buzVal = -1;
+  int ledVal = -1;
+  String lcdText = "";
 
-  // Extract BT value
-  int btIndex = command.indexOf("BT:");
-  if (btIndex != -1) {
-    btValue = command.substring(btIndex + 3, command.indexOf(";", btIndex)).toInt();
+  // Extract BUZ value
+  int buzIndex = command.indexOf("BUZ:");
+  if (buzIndex != -1) {
+    buzVal = command.substring(buzIndex + 4, command.indexOf(";", buzIndex)).toInt();
+    digitalWrite(BUZZER_PIN, buzVal == 1 ? HIGH : LOW);
   }
 
-  // Extract MS value
-  int msIndex = command.indexOf("MS:");
-  if (msIndex != -1) {
-    msValue = command.substring(msIndex + 3).toInt();
+  // Extract LED value
+  int ledIndex = command.indexOf("LED:");
+  if (ledIndex != -1) {
+    ledVal = command.substring(ledIndex + 4, command.indexOf(";", ledIndex)).toInt();
+    digitalWrite(LED_PIN, ledVal == 1 ? HIGH : LOW);
+    if (ledVal == 1) {
+      ledOnTime = millis();  // start timeout
+      ledIsOn = true;
+    } else {
+      ledIsOn = false;
+    }
   }
 
-  // === Control LED based on MS ===
-  if (msValue == 0) {
-    digitalWrite(LED_PIN, LOW);
-    ledIsOn = false;
-  } else if (msValue >= 1 && msValue <= 3) {
-    digitalWrite(LED_PIN, HIGH);
-    ledIsOn = true;
-    ledOnTime = millis();  // Start LED timer
-  }
-
-  // === Ring the doorbell if BT == 1 ===
-  if (btValue == 1) {
-    playMelody();
-  }
-
-  // === Update LCD content based on MS ===
-  lcd.clear();
-  lcd.setCursor(0, 0);
-  switch (msValue) {
-    case 1:
-      lcd.print("Warning, please");
+  // Extract LCD text
+  int lcdIndex = command.indexOf("LCD:");
+  if (lcdIndex != -1) {
+    int endIndex = command.indexOf(";", lcdIndex);
+    if (endIndex != -1) {
+      lcdText = command.substring(lcdIndex + 4, endIndex);
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("LCD:");
       lcd.setCursor(0, 1);
-      lcd.print("leave!");
-      break;
-    case 2:
-      lcd.print("Welcome to");
-      lcd.setCursor(0, 1);
-      lcd.print("smart room!");
-      break;
-    case 3:
-      lcd.print("We need HD!");
-      break;
-    default:
-      lcd.print("System Ready");
-      break;
+      lcd.print(lcdText);
+    }
   }
 }
 
