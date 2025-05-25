@@ -7,6 +7,7 @@ import paho.mqtt.client as mqtt
 # === Configuration ===
 SERIAL_PORT = '/dev/ttyACM0'  # e.g., 'COM3' on Windows or '/dev/ttyACM0' on Linux
 BAUD_RATE = 9600
+
 MQTT_BROKER = '169.254.176.157'
 MQTT_PORT = 1883
 MQTT_PUB_TOPIC = 'topic/example'     # Topic for publishing Arduino data
