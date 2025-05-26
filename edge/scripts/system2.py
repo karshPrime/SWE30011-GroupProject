@@ -6,7 +6,7 @@
 import time
 import serial
 
-from .control import get_s2_moisture_threshold, mqtt_write2
+from .control  import get_s2_moisture_threshold, mqtt_write2
 from .database import database_write2
 
 

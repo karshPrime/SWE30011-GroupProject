@@ -6,7 +6,7 @@
 import time
 import serial
 
-from .control  import clear_s1_message, get_s1_message, mqtt_write1
+from .control  import get_s1_message, mqtt_write1
 from .database import database_write1
 
 
@@ -26,7 +26,8 @@ def Run(port):
             message = get_s1_message()
             if message:
                 connection.write(message.encode())
-                clear_s1_message()
+
+            time.sleep(1)
 
 #---------------------------------------------------------------------------------------------------
 

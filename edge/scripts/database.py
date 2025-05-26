@@ -3,7 +3,6 @@
 import time
 import pymysql
 import threading
-import time
 
 #- Global ------------------------------------------------------------------------------------------
 
@@ -22,6 +21,7 @@ scheduled_queries = []
 from threading import Lock
 queue_lock = Lock()
 
+
 #- Database write scheduler ------------------------------------------------------------------------
 
 def database_write_scheduler():
@@ -39,6 +39,7 @@ def database_write_scheduler():
 
 # Start scheduler in a separate thread
 threading.Thread(target=database_write_scheduler, daemon=True).start()
+
 
 #- System1 Queries ---------------------------------------------------------------------------------
 
@@ -74,10 +75,12 @@ def database_write1(prompt):
                 (override_motor,)
             ))
 
+
 #- System2 Queries ---------------------------------------------------------------------------------
 
 def database_write2(moisture, temperature, humidity, callibration):
     now = time.strftime('%Y-%m-%d %H:%M:%S') + '.' + str(int(time.time() * 1000) % 1000)
+
     with queue_lock:
         scheduled_queries.append((
             "INSERT INTO system2 (timestamp, soilMoisture, temperature, humidity, moistureValue)\
@@ -85,13 +88,18 @@ def database_write2(moisture, temperature, humidity, callibration):
             (now, moisture, temperature, humidity, callibration)
         ))
 
+
 #- System3 Queries ---------------------------------------------------------------------------------
 
-def database_write3(potentiometer, button, motionSensor):
+def database_write3(button, temperature, motionSensor):
     now = time.strftime('%Y-%m-%d %H:%M:%S') + '.' + str(int(time.time() * 1000) % 1000)
+
     with queue_lock:
         scheduled_queries.append((
-            "INSERT INTO system3 (timestamp, potentiometer, button, motionSensor)\
+            "INSERT INTO system3 (timestamp, temperature, button, motionSensor)\
              VALUES (%s, %s, %s, %s)",
-            (now, potentiometer, button, motionSensor)
+            (now, temperature, button, motionSensor)
         ))
+
+#---------------------------------------------------------------------------------------------------
+
