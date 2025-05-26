@@ -6,7 +6,7 @@
 import time
 import serial
 
-from .control import get_s2_moisture_threshold
+from .control import get_s2_moisture_threshold, mqtt_write2
 from .database import database_write2
 
 
@@ -50,6 +50,11 @@ def Run(port):
                         print(f"[system2] Malformed line: {line}")
 
             database_write2(
+                values['moisture'], values['temperature'],
+                values['humidity'], values['callibration']
+            )
+
+            mqtt_write2( 
                 values['moisture'], values['temperature'],
                 values['humidity'], values['callibration']
             )

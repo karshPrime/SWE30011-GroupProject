@@ -5,7 +5,6 @@
 
 SYSTEM1_PORT = "/dev/ttyACM0"
 SYSTEM2_PORT = "/dev/ttyACM1"
-SYSTEM3_PORT = "/dev/ttyACM2"
 
 
 #- Imports -----------------------------------------------------------------------------------------
@@ -21,7 +20,7 @@ from scripts.system3 import Run as System3Run
 def main():
     thread1 = threading.Thread(target=System1Run, args=(SYSTEM1_PORT,))
     thread2 = threading.Thread(target=System2Run, args=(SYSTEM2_PORT,))
-    thread3 = threading.Thread(target=System3Run, args=(SYSTEM3_PORT,))
+    thread3 = threading.Thread(target=System3Run, args=())
 
     thread1.start()
     thread2.start()

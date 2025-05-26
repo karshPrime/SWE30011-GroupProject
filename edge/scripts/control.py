@@ -1,6 +1,10 @@
 
 # scripts/control.py
 
+HOSTNAME = "169.254.123.100"
+
+import paho.mqtt.publish as publish
+
 #- Configurable Controls ---------------------------------------------------------------------------
 
 s1_motor = 0
@@ -43,14 +47,17 @@ def get_s2_moisture_threshold():
     return s2_moisture_threshold
 
 
-def get_s3_message():
-    global s3_temperature
-    global old_s3_temperature
-
-    if s3_temperature != old_s3_temperature:
-        old_s3_temperature = s3_temperature
-        return s3_temperature
-
-
 #---------------------------------------------------------------------------------------------------
+
+def mqtt_write1(message):
+    publish.single( "/system1/system1", message, hostname=HOSTNAME)
+
+def mqtt_write2(moisture, temperature, humidity, callibration):
+    publish.single( "/system2/moisture", moisture, hostname=HOSTNAME)
+    publish.single( "/system2/temperature", temperature, hostname=HOSTNAME)
+    publish.single( "/system2/humidity", humidity, hostname=HOSTNAME)
+    publish.single( "/system2/callibration", callibration, hostname=HOSTNAME)
+
+def UpdateValues():
+    pass
 
