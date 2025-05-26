@@ -1,6 +1,6 @@
 
 CREATE TABLE system1 (
-    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP PRIMARY KEY,
+    timestamp DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) PRIMARY KEY,
     temperature DECIMAL(4,1),
     motorOverride BOOLEAN,
     controlled BOOLEAN,
@@ -8,7 +8,7 @@ CREATE TABLE system1 (
 );
 
 CREATE TABLE system2 (
-    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP PRIMARY KEY,
+    timestamp DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) PRIMARY KEY,
     soilMoisture DECIMAL(5,2),
     temperature DECIMAL(4,1),
     humidity DECIMAL(4,1),
@@ -16,7 +16,7 @@ CREATE TABLE system2 (
 );
 
 CREATE TABLE system3 (
-    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP PRIMARY KEY,
+    timestamp DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) PRIMARY KEY,
     potentiometer FLOAT,
     button BOOLEAN,
     motionSensor BOOLEAN
