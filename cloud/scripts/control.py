@@ -14,6 +14,18 @@ import paho.mqtt.publish as publish
 from .board import thingsboard_publish
 
 
+#- Trigger Alert Beep ------------------------------------------------------------------------------
+
+s2_moisture = None
+moisture_threshold = None
+
+def s2_moisture_alert():
+    try:
+        return float(s2_moisture) > float(moisture_threshold)
+    except:
+        return False
+
+
 #- MQTT Publish ------------------------------------------------------------------------------------
 
 def mqtt_write1(topic, value):
@@ -21,6 +33,8 @@ def mqtt_write1(topic, value):
 
 def mqtt_write2(value):
     publish.single("/cloud/s2/moisture_threshold", value, hostname=HOSTNAME)
+    global moisture_threshold
+    moisture_threshold = value
 
 def mqtt_write3(title, data):
     # temperature, city, source
@@ -49,6 +63,10 @@ def on_message(client, userdata, msg):
         pass
     else:
         thingsboard_publish( topic, message )
+
+    if topic == "s2_moisture":
+        global s2_moisture
+        s2_moisture = message
 
 def mqtt_setup():
     print("[mqtt] Setting Connection")

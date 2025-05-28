@@ -7,7 +7,7 @@ import time
 import serial
 import requests
 
-from .control import mqtt_write3
+from .control import mqtt_write3, s2_moisture_alert
 from .board   import thingsboard_publish
 
 #- Get Weather -------------------------------------------------------------------------------------
@@ -65,6 +65,9 @@ def system_run(port):
             if TEMPERATURE:
                 connection.write(f"LCD:{CITY}={TEMPERATURE}".encode('utf-8') + b'\n')
                 TEMPERATURE = None
+
+            if s2_moisture_alert():
+                connection.write("alert".encode('utf-8') + b'\n')
 
             # --- Read response from Arduino ---
             if connection.in_waiting > 0:
