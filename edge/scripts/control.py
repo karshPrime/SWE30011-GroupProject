@@ -3,6 +3,7 @@
 
 HOSTNAME = "169.254.123.100"
 
+import paho.mqtt.client as mqtt
 import paho.mqtt.publish as publish
 
 #- Configurable Controls ---------------------------------------------------------------------------
@@ -27,7 +28,55 @@ def mqtt_write2(moisture, temperature, humidity, callibration):
     publish.single("/edge/s2/callibration", callibration, hostname=HOSTNAME)
 
 
+#- MQTT Subscribe ----------------------------------------------------------------------------------
 
+def on_connect(client, userdata, flags, rc):
+    print("[mqtt] Connected with result code " + str(rc))
+    client.subscribe("/cloud/s1/motor")
+    client.subscribe("/cloud/s1/temperature_threshold")
+    client.subscribe("/cloud/s2/moisture_threshold")
+    client.subscribe("/cloud/s3/temperature")
+    client.subscribe("/cloud/s3/button")
+    client.subscribe("/cloud/s3/motionSensor")
+
+
+def on_message(client, userdata, msg):
+    message = msg.payload.decode()
+
+    if msg.topic == "/cloud/s1/motor":
+        global s1_motor
+        s1_motor = message
+
+    elif msg.topic == "/cloud/s1/temperature_threshold":
+        global s1_temperature_threshold
+        s1_temperature_threshold = message
+
+    elif msg.topic == "/cloud/s2/moisture_threshold":
+        global s2_moisture_threshold
+        s2_moisture_threshold = message
+
+    elif msg.topic == "/cloud/s3/temperature":
+        global s3_temperature
+        s3_temperature = message
+
+    elif msg.topic == "/cloud/s3/button":
+        global s3_button
+        s3_button = message
+
+    elif msg.topic == "/cloud/s3/motionSensor":
+        global s3_motionSensor
+        s3_motionSensor = message
+
+    else:
+        print(f"[mqtt] invalid topic:\"{msg.topic}\" : {message}")
+
+
+def mqtt_setup():
+    client = mqtt.Client()
+    client.on_connect = on_connect
+    client.on_message = on_message
+    client.connect(HOSTNAME, 1883, 60)
+    client.loop_forever()
 
 
 #- Get Values --------------------------------------------------------------------------------------
