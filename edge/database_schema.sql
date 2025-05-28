@@ -17,8 +17,8 @@ CREATE TABLE system2 (
 
 CREATE TABLE system3 (
     timestamp DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) PRIMARY KEY,
-    potentiometer FLOAT,
-    button BOOLEAN,
-    motionSensor BOOLEAN
+    temperature FLOAT,
+    city VARCHAR(100),
+    source ENUM('button', 'motionSensor')
 );
 

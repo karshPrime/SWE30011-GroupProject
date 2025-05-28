@@ -91,14 +91,14 @@ def database_write2(moisture, temperature, humidity, callibration):
 
 #- System3 Queries ---------------------------------------------------------------------------------
 
-def database_write3(button, temperature, motionSensor):
+def database_write3(temperature, city, source):
     now = time.strftime('%Y-%m-%d %H:%M:%S') + '.' + str(int(time.time() * 1000) % 1000)
 
     with queue_lock:
         scheduled_queries.append((
-            "INSERT INTO system3 (timestamp, temperature, button, motionSensor)\
+            "INSERT INTO system3 (timestamp, temperature, city, source)\
              VALUES (%s, %s, %s, %s)",
-            (now, temperature, button, motionSensor)
+            (now, temperature, city, source)
         ))
 
 #---------------------------------------------------------------------------------------------------

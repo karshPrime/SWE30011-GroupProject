@@ -13,10 +13,10 @@ from .database import database_write3
 
 def system_run():
     while True:
-        button, temperature, motionSensor = get_s3_data()
+        temperature, city, source = get_s3_data()
 
-        if all(x is not None for x in (button, temperature, motionSensor)):
-            database_write3(button, temperature, motionSensor)
+        if all([temperature, city, source]):
+            database_write3(temperature, city, source)
 
         time.sleep(1)
 

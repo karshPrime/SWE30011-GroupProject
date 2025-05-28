@@ -3,8 +3,11 @@
 
 HOSTNAME = "169.254.123.100"
 
+#- Imports -----------------------------------------------------------------------------------------
+
 import paho.mqtt.client as mqtt
 import paho.mqtt.publish as publish
+
 
 #- Configurable Controls ---------------------------------------------------------------------------
 
@@ -12,20 +15,28 @@ s1_motor = None
 s1_temperature_threshold = None
 s2_moisture_threshold = None
 s3_temperature = None
-s3_button = None
-s3_motionSensor = None
+s3_city = None
+s3_source = None
 
 
 #- MQTT Publish ------------------------------------------------------------------------------------
 
 def mqtt_write1(message):
-    publish.single("/edge/s1/prompt", message, hostname=HOSTNAME)
+    if message:
+        publish.single("/edge/s1/prompt", message, hostname=HOSTNAME)
 
 def mqtt_write2(moisture, temperature, humidity, callibration):
-    publish.single("/edge/s2/moisture", moisture, hostname=HOSTNAME)
-    publish.single("/edge/s2/temperature", temperature, hostname=HOSTNAME)
-    publish.single("/edge/s2/humidity", humidity, hostname=HOSTNAME)
-    publish.single("/edge/s2/callibration", callibration, hostname=HOSTNAME)
+    if moisture:
+        publish.single("/edge/s2/moisture", moisture, hostname=HOSTNAME)
+
+    if temperature:
+        publish.single("/edge/s2/temperature", temperature, hostname=HOSTNAME)
+
+    if humidity:
+        publish.single("/edge/s2/humidity", humidity, hostname=HOSTNAME)
+
+    if callibration:
+        publish.single("/edge/s2/callibration", callibration, hostname=HOSTNAME)
 
 
 #- MQTT Subscribe ----------------------------------------------------------------------------------
@@ -36,12 +47,13 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("/cloud/s1/temperature_threshold")
     client.subscribe("/cloud/s2/moisture_threshold")
     client.subscribe("/cloud/s3/temperature")
-    client.subscribe("/cloud/s3/button")
-    client.subscribe("/cloud/s3/motionSensor")
+    client.subscribe("/cloud/s3/city")
+    client.subscribe("/cloud/s3/source")
 
 
 def on_message(client, userdata, msg):
     message = msg.payload.decode()
+    print(f"[mqtt]\"{msg.topic}\" : {message}")
 
     if msg.topic == "/cloud/s1/motor":
         global s1_motor
@@ -59,13 +71,13 @@ def on_message(client, userdata, msg):
         global s3_temperature
         s3_temperature = message
 
-    elif msg.topic == "/cloud/s3/button":
-        global s3_button
-        s3_button = message
+    elif msg.topic == "/cloud/s3/city":
+        global s3_city
+        s3_city = message
 
-    elif msg.topic == "/cloud/s3/motionSensor":
-        global s3_motionSensor
-        s3_motionSensor = message
+    elif msg.topic == "/cloud/s3/source":
+        global s3_source
+        s3_source = message
 
     else:
         print(f"[mqtt] invalid topic:\"{msg.topic}\" : {message}")
@@ -104,14 +116,21 @@ def get_s2_moisture_threshold():
 
 
 def get_s3_data():
-    global s3_button, s3_temperature, s3_motionSensor
-    button, temperature, motionSensor = s3_button, s3_temperature, s3_motionSensor
+    global s3_source
 
-    s3_button = None
-    s3_temperature = None
-    s3_motionSensor = None
+    temperature = s3_temperature or ""
+    city = s3_city or ""
 
-    return (button, temperature, motionSensor)
+    source = ""
+
+    if s3_source == "MS":
+        source = "motionSensor"
+    elif s3_source == "BT":
+        source = "button"
+
+    s3_source = None
+
+    return (temperature, city, source)
 
 #---------------------------------------------------------------------------------------------------
 
