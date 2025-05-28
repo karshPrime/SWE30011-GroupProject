@@ -19,20 +19,23 @@ from scripts.control import mqtt_setup
 #- Main entry point --------------------------------------------------------------------------------
 
 def main():
-    thread_mqtt = threading.Thread(target=mqtt_setup, args=())
-    thread1 = threading.Thread(target=s1_run, args=(SYSTEM1_PORT,))
-    thread2 = threading.Thread(target=s2_run, args=(SYSTEM2_PORT,))
-    thread3 = threading.Thread(target=s3_run, args=())
+    try:
+        thread_mqtt = threading.Thread(target=mqtt_setup, args=())
+        thread1 = threading.Thread(target=s1_run, args=(SYSTEM1_PORT,))
+        thread2 = threading.Thread(target=s2_run, args=(SYSTEM2_PORT,))
+        thread3 = threading.Thread(target=s3_run, args=())
 
-    thread_mqtt.start()
-    thread1.start()
-    thread2.start()
-    thread3.start()
+        thread_mqtt.start()
+        thread1.start()
+        thread2.start()
+        thread3.start()
 
-    thread_mqtt.join()
-    thread1.join()
-    thread2.join()
-    thread3.join()
+    except KeyboardInterrupt:
+        print("[main] stopping the system")
+        thread_mqtt.join()
+        thread1.join()
+        thread2.join()
+        thread3.join()
 
 #---------------------------------------------------------------------------------------------------
 
