@@ -42,7 +42,7 @@ def mqtt_write2(moisture, temperature, humidity, callibration):
 #- MQTT Subscribe ----------------------------------------------------------------------------------
 
 def on_connect(client, userdata, flags, rc):
-    print("[mqtt] Connected with result code " + str(rc))
+    print("[mqtt] Connected with result code ", rc)
     client.subscribe("/cloud/s1/motor")
     client.subscribe("/cloud/s1/temperature_threshold")
     client.subscribe("/cloud/s2/moisture_threshold")
@@ -53,29 +53,34 @@ def on_connect(client, userdata, flags, rc):
 
 def on_message(client, userdata, msg):
     message = msg.payload.decode()
-    print(f"[mqtt]\"{msg.topic}\" : {message}")
 
     if msg.topic == "/cloud/s1/motor":
+        print("[mqtt] motor set to ", message)
         global s1_motor
         s1_motor = message
 
     elif msg.topic == "/cloud/s1/temperature_threshold":
+        print("[mqtt] temperature_threshold set to ", message)
         global s1_temperature_threshold
         s1_temperature_threshold = message
 
     elif msg.topic == "/cloud/s2/moisture_threshold":
+        print("[mqtt] moisture_threshold set to ", message)
         global s2_moisture_threshold
         s2_moisture_threshold = message
 
     elif msg.topic == "/cloud/s3/temperature":
+        print("[mqtt] temperature set to ", message)
         global s3_temperature
         s3_temperature = message
 
     elif msg.topic == "/cloud/s3/city":
+        print("[mqtt] city set to ", message)
         global s3_city
         s3_city = message
 
     elif msg.topic == "/cloud/s3/source":
+        print("[mqtt] source set to ", message)
         global s3_source
         s3_source = message
 
@@ -84,6 +89,7 @@ def on_message(client, userdata, msg):
 
 
 def mqtt_setup():
+    print("[mqtt] Setting Connection")
     client = mqtt.Client()
     client.on_connect = on_connect
     client.on_message = on_message

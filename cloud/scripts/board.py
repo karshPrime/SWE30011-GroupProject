@@ -21,17 +21,9 @@ def thingsboard_publish( tag, value ):
 
 #- MQTT Subscribe ----------------------------------------------------------------------------------
 
-def on_connect(client, userdata, flags, rc):
-    print("[thingsboard] Connected with result code", rc)
-
-def on_message(client, userdata, msg):
-    print("[thingsboard] " + msg.topic + ": " + str(msg.payload))
-
 def thingsboard_setup():
     print("[thingsboard] Setting Connection")
     client.username_pw_set(USERNAME)
-    client.on_connect = on_connect
-    client.on_message = on_message
     client.connect(BROKER, 1883, 60)
     client.loop_start()
 
