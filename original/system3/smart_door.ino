@@ -34,6 +34,7 @@ void loop()
 {
     static unsigned long ledOnTime = 0;
     static bool ledIsOn = false;
+    static unsigned int msCounter = 0;
 
     // Parse serial input
     if (Serial.available())
@@ -45,17 +46,20 @@ void loop()
         else if (input == "alert")   { alertMelody(); }
     }
 
-    if (digitalRead(PIR_PIN))
+    if (digitalRead(PIR_PIN)) { msCounter++; }
+
+    if (msCounter > 5)
     {
-        Serial.println("MS:1;");
+        Serial.println("MS");
         digitalWrite(LED_PIN, HIGH);
         ledOnTime = millis();
         ledIsOn = true;
+        msCounter = 0;
     }
 
     if (!digitalRead(BUTTON_PIN))
     {
-        Serial.println("BT:1;");
+        Serial.println("BT");
         buttonMelody();
     }
 
@@ -81,7 +85,6 @@ void printCityAndTemperature(String input)
     if (colonIndex == -1 || equalIndex == -1 || equalIndex <= colonIndex)
     {
         lcd.setCursor(0, 0);
-        lcd.print("Invalid input");
         return;
     }
 
