@@ -10,6 +10,7 @@ SYSTEM_PORT = "/dev/tty.usbmodem21401"
 
 import threading
 
+from scripts.web     import run_webserver
 from scripts.system  import system_run, update_temperature, system_terminate
 from scripts.board   import thingsboard_setup, thingsboard_terminate
 from scripts.control import mqtt_setup, mqtt_terminate
@@ -28,6 +29,8 @@ def main():
         thread_sys.start()
         thread_temp_api.start()
         thread_board.start()
+
+        run_webserver()
 
     except KeyboardInterrupt:
         system_terminate()

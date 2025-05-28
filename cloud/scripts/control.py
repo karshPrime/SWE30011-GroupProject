@@ -1,5 +1,5 @@
 
-# scripts/system.py
+# scripts/control.py
 
 HOSTNAME = "169.254.123.100"
 
@@ -16,12 +16,11 @@ from .board import thingsboard_publish
 
 #- MQTT Publish ------------------------------------------------------------------------------------
 
-def mqtt_write1_motor(channel):
-    publish.single("/cloud/s1/motor", motor, hostname=HOSTNAME)
-    publish.single("/cloud/s1/temperature_threshold", s1_temperature_threshold, hostname=HOSTNAME)
+def mqtt_write1(topic, value):
+    publish.single(f"/cloud/s1/{topic}", value, hostname=HOSTNAME)
 
-def mqtt_write2():
-    publish.single("/cloud/s2/moisture_threshold", s2_moisture_threshold, hostname=HOSTNAME)
+def mqtt_write2(value):
+    publish.single("/cloud/s2/moisture_threshold", value, hostname=HOSTNAME)
 
 def mqtt_write3(title, data):
     # temperature, city, source
