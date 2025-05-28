@@ -82,37 +82,31 @@ def mqtt_setup():
 #- Get Values --------------------------------------------------------------------------------------
 
 def get_s1_message():
+    global s1_motor
     if s1_motor:
         value = s1_motor
-
-        global s1_motor
         s1_motor = None
-
         return value
 
+    global s1_temperature_threshold
     if s1_temperature_threshold:
         value = s1_temperature_threshold
-
-        global s1_temperature_threshold
         s1_temperature_threshold = None
 
         return f"t{value}"
 
 
 def get_s2_moisture_threshold():
-    value = s2_moisture_threshold
-    
-    # prevent from data repeat
     global s2_moisture_threshold
-    s2_moisture_threshold = None
-
+    value = s2_moisture_threshold
+    s2_moisture_threshold = None # prevent from data repeat
     return value
 
 
 def get_s3_data():
+    global s3_button, s3_temperature, s3_motionSensor
     button, temperature, motionSensor = s3_button, s3_temperature, s3_motionSensor
 
-    global s3_button, s3_temperature, s3_motionSensor
     s3_button = None
     s3_temperature = None
     s3_motionSensor = None
