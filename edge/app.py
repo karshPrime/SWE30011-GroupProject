@@ -10,9 +10,9 @@ SYSTEM2_PORT = "/dev/ttyACM1"
 #- Imports -----------------------------------------------------------------------------------------
 
 import threading
-from scripts.system1 import Run as System1Run
-from scripts.system2 import Run as System2Run
-from scripts.system3 import Run as System3Run
+from scripts.system1 import system_run as s1_run
+from scripts.system2 import system_run as s2_run
+from scripts.system3 import system_run as s3_run
 from scripts.control import mqtt_setup
 
 
@@ -20,9 +20,9 @@ from scripts.control import mqtt_setup
 
 def main():
     thread_mqtt = threading.Thread(target=mqtt_setup, args=())
-    thread1 = threading.Thread(target=System1Run, args=(SYSTEM1_PORT,))
-    thread2 = threading.Thread(target=System2Run, args=(SYSTEM2_PORT,))
-    thread3 = threading.Thread(target=System3Run, args=())
+    thread1 = threading.Thread(target=s1_run, args=(SYSTEM1_PORT,))
+    thread2 = threading.Thread(target=s2_run, args=(SYSTEM2_PORT,))
+    thread3 = threading.Thread(target=s3_run, args=())
 
     thread_mqtt.start()
     thread1.start()

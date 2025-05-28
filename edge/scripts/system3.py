@@ -11,7 +11,7 @@ from .database import database_write3
 
 #- Public Calls ------------------------------------------------------------------------------------
 
-def Run():
+def system_run():
     while True:
         button, temperature, motionSensor = get_s3_data()
 

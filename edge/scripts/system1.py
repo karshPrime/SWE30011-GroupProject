@@ -12,7 +12,7 @@ from .database import database_write1
 
 #- Public Calls ------------------------------------------------------------------------------------
 
-def Run(port):
+def system_run(port):
     with serial.Serial(port, 9600, timeout=1) as connection:
         time.sleep(2)
         print("[system1] setting up system1")

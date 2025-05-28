@@ -12,7 +12,7 @@ from .database import database_write2
 
 #- Public Calls ------------------------------------------------------------------------------------
 
-def Run(port):
+def system_run(port):
     with serial.Serial(port, 9600, timeout=1) as connection:
         time.sleep(2)
         print("[system2] setting up system2")
@@ -64,8 +64,8 @@ def Run(port):
                 moisture = values['moisture']
                 threshold = get_s2_moisture_threshold()
 
-                if moisture is not None:
-                    if moisture < threshold:
+                if moisture and threshold:
+                    if moisture < float(threshold):
                         connection.write(b"1\n")
                     else:
                         connection.write(b"0\n")
