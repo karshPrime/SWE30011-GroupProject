@@ -110,7 +110,7 @@ def index():
     if request.method == 'POST':
         # Update settings with form data
         if 'toggle_motor' in request.form:
-                settings['motor'] = 't'
+                settings['motor'] = 'm'
         settings['temperature_threshold'] = request.form.get('temperature_threshold', type=int)
         settings['moisture_threshold'] = request.form.get('moisture_threshold', type=int)
         settings['city'] = request.form.get('city', '')
