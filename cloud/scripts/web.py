@@ -73,7 +73,6 @@ form_template = """
             margin-top: 20px;
         }
     </style>
-    </style>
 </head>
 
 <body>
