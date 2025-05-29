@@ -28,7 +28,7 @@ form_template = """
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Settings</title>
     <style>
-               body {
+        body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             margin: 0;
@@ -56,8 +56,7 @@ form_template = """
             border: 1px solid #ccc;
             border-radius: 4px;
         }
-        input[type="submit"],
-        button {
+        input[type="submit"] {
             background-color: #5cb85c;
             color: white;
             border: none;
@@ -65,8 +64,7 @@ form_template = """
             border-radius: 4px;
             cursor: pointer;
         }
-        input[type="submit"]:hover,
-        button:hover {
+        input[type="submit"]:hover {
             background-color: #4cae4c;
         }
         h2 {
@@ -79,9 +77,7 @@ form_template = """
     <h1>Configure Variables</h1>
     <form method="POST">
         <label for="motor">Motor:</label>
-        <button type="submit" name="toggle_motor" value="1">
-            Toggle Motor
-        </button>
+        <input type="text" id="motor" name="motor" value="{{ motor }}">
         <br><br>
 
         <label for="temperature_threshold">Temperature Threshold:</label>
@@ -109,8 +105,7 @@ form_template = """
 def index():
     if request.method == 'POST':
         # Update settings with form data
-        if 'toggle_motor' in request.form:
-                settings['motor'] = 'm'
+        settings['motor'] = request.form.get('motor', '')
         settings['temperature_threshold'] = request.form.get('temperature_threshold', type=int)
         settings['moisture_threshold'] = request.form.get('moisture_threshold', type=int)
         settings['city'] = request.form.get('city', '')
@@ -125,4 +120,3 @@ def index():
 
 def run_webserver():
     app.run()
-
