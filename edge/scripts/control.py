@@ -8,7 +8,6 @@ HOSTNAME = "169.254.123.100"
 import paho.mqtt.client as mqtt
 import paho.mqtt.publish as publish
 
-
 #- Configurable Controls ---------------------------------------------------------------------------
 
 s1_motor = None
@@ -23,11 +22,24 @@ s3_source = None
 
 def mqtt_write1(message):
     if message:
-        publish.single("/edge/s1/prompt", message, hostname=HOSTNAME)
+        temp = None
+        control = None
+        parts = message.lower().split()
+
+        for part in parts:
+            key_value = part.split(':')
+            if len(key_value) == 2:
+                key = key_value[0].strip()
+                value = key_value[1].strip()
+
+                publish.single(f"/edge/s1/{key}", value, hostname=HOSTNAME)
 
 def mqtt_write2(moisture, temperature, humidity, callibration):
     if moisture:
         publish.single("/edge/s2/moisture", moisture, hostname=HOSTNAME)
+    else:
+        publish.single("/edge/s2/moisture", 0, hostname=HOSTNAME)
+
 
     if temperature:
         publish.single("/edge/s2/temperature", temperature, hostname=HOSTNAME)

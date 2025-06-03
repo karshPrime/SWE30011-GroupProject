@@ -47,7 +47,8 @@ client = mqtt.Client()
 
 def on_connect(client, userdata, flags, rc):
     print("[mqtt] Connected with result code " + str(rc))
-    client.subscribe("/edge/s1/prompt")
+    client.subscribe("/edge/s1/temperature")
+    client.subscribe("/edge/s1/control")
     client.subscribe("/edge/s2/moisture")
     client.subscribe("/edge/s2/temperature")
     client.subscribe("/edge/s2/humidity")
@@ -59,10 +60,7 @@ def on_message(client, userdata, msg):
 
     print(f"[mqtt]\"{topic}\" : {message}")
 
-    if topic == "s1_prompt":
-        pass
-    else:
-        thingsboard_publish( topic, message )
+    thingsboard_publish(topic, message)
 
     if topic == "s2_moisture":
         global s2_moisture

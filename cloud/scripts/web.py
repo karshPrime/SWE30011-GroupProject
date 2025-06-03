@@ -74,16 +74,8 @@ form_template = """
 </head>
 
 <body>
-    <h1>Configure Variables</h1>
+    <h1>System Configure</h1>
     <form method="POST">
-        <label for="motor">Motor:</label>
-        <input type="text" id="motor" name="motor" value="{{ motor }}">
-        <br><br>
-
-        <label for="temperature_threshold">Temperature Threshold:</label>
-        <input type="number" id="temperature_threshold" name="temperature_threshold" value="{{ temperature_threshold }}">
-        <br><br>
-
         <label for="moisture_threshold">Moisture Threshold:</label>
         <input type="number" id="moisture_threshold" name="moisture_threshold" value="{{ moisture_threshold }}">
         <br><br>
@@ -111,8 +103,6 @@ def index():
         settings['city'] = request.form.get('city', '')
 
         # Set values
-        mqtt_write1("motor", settings['motor'])
-        mqtt_write1("temperature_threshold", settings['temperature_threshold'])
         mqtt_write2(settings['moisture_threshold'])
         get_temperature(settings['city'])
 
