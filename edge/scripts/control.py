@@ -22,8 +22,6 @@ s3_source = None
 
 def mqtt_write1(message):
     if message:
-        temp = None
-        control = None
         parts = message.lower().split()
 
         for part in parts:

@@ -5,9 +5,6 @@ HOSTNAME = "169.254.123.100"
 
 #- Imports -----------------------------------------------------------------------------------------
 
-import time
-import serial
-
 import paho.mqtt.client as mqtt
 import paho.mqtt.publish as publish
 
